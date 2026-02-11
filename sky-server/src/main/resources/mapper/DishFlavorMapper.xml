@@ -5,7 +5,7 @@
 
 
     <insert id="insertBatch" >
-        insert into dish_flavoer (dish_id, name, value) values
+        insert into dish_flavor (dish_id, name, value) values
         <foreach collection="list" item="dishFlavor" separator=",">
             (#{dishFlavor.dishId},#{dishFlavor.name},#{dishFlavor.value})
         </foreach>
