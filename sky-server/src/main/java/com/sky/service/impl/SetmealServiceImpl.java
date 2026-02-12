@@ -70,13 +70,14 @@ public class SetmealServiceImpl implements SetmealService {
 
     /**
      * 批量删除套餐
+     *
      * @param ids
      */
     @Transactional
     public void deleteBatch(List<Long> ids) {
         ids.forEach(id -> {
             Setmeal setmeal = setmealMapper.getById(id);
-            if(StatusConstant.ENABLE == setmeal.getStatus()){
+            if (StatusConstant.ENABLE == setmeal.getStatus()) {
                 //起售中的套餐不能删除
                 throw new DeletionNotAllowedException(MessageConstant.SETMEAL_ON_SALE);
             }
@@ -90,4 +91,42 @@ public class SetmealServiceImpl implements SetmealService {
         });
     }
 
+
+    public SetmealVO getByIdWithDish(Long id){
+        Setmeal setmeal = setmealMapper.getById(id);
+        List<SetmealDish> setmealDishes = setmealDishMapper.getBySetmealId(id);
+
+        SetmealVO setmealVO = new SetmealVO();
+        BeanUtils.copyProperties(setmeal, setmealVO);
+        setmealVO.setSetmealDishes(setmealDishes);
+        return setmealVO;
+
+    }
+
+
+    /**
+     * 修改套餐
+     *
+     * @param setmealDTO
+     */
+    @Transactional
+    public void updateWithDish(SetmealDTO setmealDTO) {
+        Setmeal setmeal = new Setmeal();
+        BeanUtils.copyProperties(setmealDTO, setmeal);
+        //修改套餐表数据
+        setmealMapper.update(setmeal);
+
+        //删除原有的菜品数据
+        setmealDishMapper.deleteBySetmealId(setmealDTO.getId());
+
+        //插入新的菜品数据
+        List<SetmealDish> setmealDishes = setmealDTO.getSetmealDishes();
+        if (setmealDishes != null && setmealDishes.size() > 0) {
+            setmealDishes.forEach(setmealDish -> {
+                setmealDish.setSetmealId(setmealDTO.getId());
+                setmealDishMapper.insertBatch(setmealDishes);
+
+            });
+        }
+    }
 }
