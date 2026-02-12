@@ -28,6 +28,7 @@
     </select>
 
 
+
     <update id="update">
         update setmeal
         <set>
@@ -37,6 +38,8 @@
             <if test="status != null">  status = #{status},</if>
             <if test="description != null">  description = #{description},</if>
             <if test="image != null">  image = #{image},</if>
+            <if test="updateTime != null">  update_time = #{updateTime},</if>
+            <if test="updateUser != null">  update_user = #{updateUser},</if>
         </set>
     </update>
 
