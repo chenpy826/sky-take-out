@@ -32,6 +32,18 @@ public class ShoppingCartController {
         return Result.success();
     }
 
+    /**
+     * 减少购物车
+     * @return
+     */
+    @PostMapping("/sub")
+    public Result sub(@RequestBody ShoppingCartDTO shoppingCartDTO) {
+        log.info("减少购物车");
+        shoppingCartService.subShoppingCart(shoppingCartDTO);
+        return Result.success();
+    }
+
+
 
     /**
      * 查看购物车
