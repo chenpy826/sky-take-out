@@ -20,6 +20,7 @@ import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -181,5 +182,24 @@ public class OrderServiceImpl implements OrderService{
         }
 
         return new PageResult(page.getTotal(),list);
+    }
+
+    /**
+     * 查询订单详情
+     * @param id
+     * @return
+     */
+    public OrderVO details(Long id){
+        Orders orders = orderMapper.getById(id);//根据id查询订单
+
+        //获取订单详情
+        List<OrderDetail> orderDetailList = orderDetailMapper.getByOrderId(id);
+
+        //封装VO
+        OrderVO orderVO = new OrderVO();
+        BeanUtils.copyProperties(orders,orderVO);
+        //设置订单详情
+        orderVO.setOrderDetailList(orderDetailList);
+        return orderVO;
     }
 }
