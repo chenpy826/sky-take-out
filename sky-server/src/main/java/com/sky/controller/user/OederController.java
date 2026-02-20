@@ -86,4 +86,16 @@ public class OederController {
     }
 
 
+    /**
+     * 取消订单
+     * @param id
+     * @return
+     */
+    @PutMapping("/cancel/{id}")
+    public Result cancel(@PathVariable Long id)  throws Exception{
+        log.info("取消订单，订单id为：{}",id);
+        orderService.userCancelById(id) ;
+        return Result.success();
+    }
+
 }
