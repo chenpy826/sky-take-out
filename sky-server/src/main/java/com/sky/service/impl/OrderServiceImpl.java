@@ -451,5 +451,24 @@ public class OrderServiceImpl implements OrderService{
         orderMapper.update(orders);
     }
 
+    public void complete(Long id){
+        // 1.查询当前订单
+        Orders ordersDB = orderMapper.getById(id);
+
+        // 2.判断当前订单是否为派送中
+        if (ordersDB == null || !ordersDB.getStatus().equals(Orders.DELIVERY_IN_PROGRESS)){
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+
+        Orders orders = Orders.builder()
+                .id(id)
+                .status(Orders.COMPLETED)
+                .deliveryTime(LocalDateTime.now())
+                .build();
+
+        orderMapper.update(orders);
+    }
+
+
 
 }
