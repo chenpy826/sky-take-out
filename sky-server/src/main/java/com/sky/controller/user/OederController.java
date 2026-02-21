@@ -98,4 +98,17 @@ public class OederController {
         return Result.success();
     }
 
+    /**
+     * 再来下单
+     * @param id
+     * @return
+     */
+
+    @PostMapping("/repetition/{id}")
+    public Result repetition(@PathVariable Long id){
+        log.info("再来一单，订单id为：{}",id);
+        orderService.repetition(id);
+        return Result.success();
+    }
+
 }
