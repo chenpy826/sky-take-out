@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.entity.Orders;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.time.LocalDateTime;
@@ -57,5 +58,5 @@ public interface OrderMapper {
 
 
     @Select("select * from orders where status = #{status} and order_time < #{orderTime}")
-    List<Orders> getByStatusAndOrderTimeLT(int i, LocalDateTime plusMinutes);
+    List<Orders> getByStatusAndOrderTimeLT(@Param("status") Integer status, @Param("orderTime") LocalDateTime orderTime);
 }
