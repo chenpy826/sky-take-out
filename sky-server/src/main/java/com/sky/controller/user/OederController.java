@@ -111,4 +111,16 @@ public class OederController {
         return Result.success();
     }
 
+    /**
+     * 客户催单
+     * @param id
+     * @return
+     */
+    @GetMapping("/reminder/{id}")
+    public Result reminder(@PathVariable Long id){
+        log.info("客户催单");
+        orderService.reminder(id);
+        return Result.success();
+    }
+
 }

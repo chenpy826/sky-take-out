@@ -424,6 +424,10 @@ public class OrderServiceImpl implements OrderService{
         orderMapper.update(orders);
     }
 
+    /**
+     * 取消订单
+     * @param ordersCancelDTO
+     */
     public void cancel(OrdersCancelDTO ordersCancelDTO){
         // 查询当前订单
         Long orderId = ordersCancelDTO.getId();
@@ -450,6 +454,10 @@ public class OrderServiceImpl implements OrderService{
         orderMapper.update(orders);
     }
 
+    /**
+     * 派送订单
+     * @param id
+     */
     public void delivery(Long id){
         // 根据id查询订单
         Orders ordersDB = orderMapper.getById(id);
@@ -466,6 +474,10 @@ public class OrderServiceImpl implements OrderService{
         orderMapper.update(orders);
     }
 
+    /**
+     * 订单完成
+     * @param id
+     */
     public void complete(Long id){
         // 1.查询当前订单
         Orders ordersDB = orderMapper.getById(id);
@@ -483,6 +495,30 @@ public class OrderServiceImpl implements OrderService{
 
         orderMapper.update(orders);
     }
+
+
+    /**
+     * 客户催单
+     * @param id
+     */
+    public void reminder(Long id){
+        // 1.查询当前订单
+        Orders ordersDB = orderMapper.getById(id);
+
+        //2.校验订单是否存在
+        if (ordersDB == null){
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+
+        // 3.通过WebSocket将消息提醒给客户
+        Map map = new HashMap();
+        map.put("type", 2);//1表示来单提醒，2表示订单状态更新提醒
+        map.put("orderId", id);
+        map.put("content", "订单号"+ordersDB.getNumber());
+
+        webSocketServer.sendToAllClient(JSON.toJSONString(map));
+    }
+
 
 
 
