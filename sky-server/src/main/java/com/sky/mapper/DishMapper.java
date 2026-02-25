@@ -12,12 +12,14 @@ import org.apache.ibatis.annotations.Select;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface DishMapper {
 
     /**
      * 根据分类id查询菜品数量
+     *
      * @param categoryId
      * @return
      */
@@ -31,6 +33,7 @@ public interface DishMapper {
 
     /**
      * 菜品分页查询
+     *
      * @param dishPageQueryDTO
      * @return
      */
@@ -39,6 +42,7 @@ public interface DishMapper {
 
     /**
      * 根据主键查询菜品和口味
+     *
      * @param id
      * @return
      */
@@ -47,6 +51,7 @@ public interface DishMapper {
 
     /**
      * 根据主键删除菜品数据
+     *
      * @param id
      */
     @Delete("delete from dish where id=#{id}")
@@ -54,6 +59,7 @@ public interface DishMapper {
 
     /**
      * 根据菜品id集合批量删除菜品数据
+     *
      * @param ids
      */
     void deleteByIds(List<Long> ids);
@@ -65,6 +71,7 @@ public interface DishMapper {
 
     /**
      * 动态条件查询菜品
+     *
      * @param dish
      * @return
      */
@@ -73,11 +80,20 @@ public interface DishMapper {
 
     /**
      * 根据套餐id查询菜品
+     *
      * @param setmealId
      * @return
      */
     @Select("select a.* from dish a left join setmeal_dish b on a.id = b.dish_id where b.setmeal_id = #{setmealId}")
-
     List<Dish> getBySetmealId(Long setmealId);
+
+    /**
+     * 根据条件统计菜品数量
+     *
+     * @param map
+     * @return
+     */
+    Integer countByMap(Map map);
+
 
 }
